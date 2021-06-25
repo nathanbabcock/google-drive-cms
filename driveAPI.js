@@ -32,12 +32,21 @@ class DriveAPI {
 
     // Load client secrets from a local file.
     fs.readFile(CREDENTIALS_PATH, (err, content) => {
-      if (err) return console.log('Error loading client secret file:', err);
+      if (err) return this.missingCredentials()
       // Authorize a client with credentials, then call the Google Drive API.
       this.authorize(JSON.parse(content), this.authCallback.bind(this));
     });
 
     this.readCache();
+  }
+
+  missingCredentials() {
+    console.error(`Could not load ${CREDENTIALS_PATH}`);
+    console.log('- Start from the the Google Drive API node.js quickstart sample: https://developers.google.com/drive/api/v3/quickstart/nodejs#prerequisites');
+    console.log(`- Follow the steps there in order to 1) create a project, 2) enable the GDrive API, and 3) authorize credentials for a webserver app`);
+    console.log('- After you download the credentials JSON file from your Cloud Platform dashboard, place it in secret/credentials.json and run this script again');
+    console.log('- see ./credentials-sample.json for an example of the format of this file (but the credentials in that sample will not work!)');
+    process.exit(1)
   }
 
   authCallback(auth) {

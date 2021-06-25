@@ -48,7 +48,7 @@ router.route('/getAll')
       .then(data => res.json(data));
   });
 
-  router.route('/getImage')
+router.route('/getImage')
   .get((req, res) => {
     // console.log('GET /getImage', req.query.id);
     try {

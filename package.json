@@ -1,0 +1,11 @@
+{
+  "name": "google-drive-cms",
+  "version": "1.0.0",
+  "description": "Connect your website to Google Drive as a backend API for content & data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

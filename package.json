@@ -2,10 +2,16 @@
   "name": "google-drive-cms",
   "version": "1.0.0",
   "description": "Connect your website to Google Drive as a backend API for content & data",
-  "main": "index.js",
+  "main": "express.js",
   "scripts": {
+    "start": "node express.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "dependencies": {
+    "express": "^4.16.4",
+    "googleapis": "^37.2.0",
+    "request": "^2.88.0"
+  },
+  "author": "Nathan Babcock",
   "license": "ISC"
 }

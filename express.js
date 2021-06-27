@@ -91,6 +91,7 @@ function onExit(callback) {
 
   // do app specific cleaning before exiting
   process.on('exit', function () {
+    // @ts-ignore
     process.emit('cleanup');
   });
 

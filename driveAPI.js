@@ -28,16 +28,20 @@ class DriveAPI {
      * The base API url for this service, used for <img src=""> in cached images
      * Can (and should) be modified by client application for production deployment URL
      */
-    this.restEndpoint = 'http://localhost:3000/api/v1';
+    this.restEndpoint = 'https://google-drive-cms.herokuapp.com/api/v1/';
+    // this.restEndpoint = 'http://localhost/api/v1';
 
     // Load client secrets from environment vars (e.g. Heroku deployment)
-    if (process.env.DRIVE_CMS_CLIENT_EMAIL && process.env.DRIVE_CMS_PRIVATE_KEY) {
+    if (process.env.CLIENT_EMAIL && process.env.PRIVATE_KEY) {
+      console.log('Using environment vars for CLIENT_EMAIL and PRIVATE_KEY');
       this.authorize({
-        client_email: process.env.DRIVE_CMS_CLIENT_EMAIL,
-        private_key: process.env.DRIVE_CMS_PRIVATE_KEY,
+        client_email: process.env.CLIENT_EMAIL,
+        private_key: process.env.PRIVATE_KEY.replace(/\\n/gm, '\n'),
+        // https://stackoverflow.com/questions/62885253/environment-variables-doesnt-replace-n-with-new-line-in-javascript-and-throw
       }, this.authCallback.bind(this))
     } else {
       // Load client secrets from file (recommended default)
+      console.log('Using secret/credentials.json for CLIENT_EMAIL and PRIVATE_KEY');
       fs.readFile(CREDENTIALS_PATH, (err, content) => {
         if (err) return this.missingCredentials()
         // Authorize a client with credentials, then call the Google Drive API.

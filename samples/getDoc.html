@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>getDoc - Google Drive CMS Demo</title>
   <script>
-    // fetch('https://google-drive-cms.herokuapp.com/api/v1/getDoc?id=1UC7Ah_8EYoGRH2aVrkByiM9XTGgeUVeJ8-2sAuKjdgY')
-    fetch('http://localhost/api/v1/getDoc?id=1UC7Ah_8EYoGRH2aVrkByiM9XTGgeUVeJ8-2sAuKjdgY')
+    fetch('https://google-drive-cms.herokuapp.com/api/v1/getDoc?id=1UC7Ah_8EYoGRH2aVrkByiM9XTGgeUVeJ8-2sAuKjdgY')
+    // fetch('http://localhost/api/v1/getDoc?id=1UC7Ah_8EYoGRH2aVrkByiM9XTGgeUVeJ8-2sAuKjdgY')
       .then(response => response.json())
       .then((data) => document.body.innerHTML = data.html)
       .catch(console.error);

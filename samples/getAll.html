@@ -18,7 +18,7 @@
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    fetch('http://localhost:3000/api/v1/getAll')
+    fetch('https://google-drive-cms.herokuapp.com/api/v1/getAll')
       .then(response => response.json())
       .then((res) => {
         document.getElementById('message').innerHTML = `Loaded ${Object.keys(res).length} files from cache.`;

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>cacheImages - Google Drive CMS Demo</title>
   <script>
-    fetch('http://localhost:3000/api/v1/getDoc?id=1Jnk2DXv0k4nhKewHpwtMSnJyQ4CwsPQ8zIZZizGx0aQ')
+    fetch('https://google-drive-cms.herokuapp.com/api/v1/getDoc?id=1Jnk2DXv0k4nhKewHpwtMSnJyQ4CwsPQ8zIZZizGx0aQ')
       .then(response => response.json())
       .then((data) => document.body.innerHTML = data.html)
       .catch(console.error);

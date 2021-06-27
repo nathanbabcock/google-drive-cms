@@ -12,7 +12,7 @@
   <script>
     const ul = document.getElementById('file-list');
 
-    fetch('http://localhost:3000/api/v1/listFiles?folder=1smalxMj6mvavnxE_w7IcATZc-GVPSUd1')
+    fetch('https://google-drive-cms.herokuapp.com/api/v1/listFiles?folder=1smalxMj6mvavnxE_w7IcATZc-GVPSUd1')
       .then(response => response.json())
       .then((files) => files.forEach(file => {
         const li = document.createElement('li');

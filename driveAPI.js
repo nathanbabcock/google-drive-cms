@@ -31,10 +31,10 @@ class DriveAPI {
     this.restEndpoint = 'http://localhost:3000/api/v1';
 
     // Load client secrets from environment vars (e.g. Heroku deployment)
-    if (process.env.CLIENT_EMAIL && process.env.PRIVATE_KEY) {
+    if (process.env.DRIVE_CMS_CLIENT_EMAIL && process.env.DRIVE_CMS_PRIVATE_KEY) {
       this.authorize({
-        client_email: process.env.CLIENT_EMAIL,
-        private_key: process.env.PRIVATE_KEY,
+        client_email: process.env.DRIVE_CMS_CLIENT_EMAIL,
+        private_key: process.env.DRIVE_CMS_PRIVATE_KEY,
       }, this.authCallback.bind(this))
     } else {
       // Load client secrets from file (recommended default)
@@ -67,7 +67,6 @@ class DriveAPI {
   }
 
   authorize(credentials, callback) {
-    console.log('authorize')
     const { client_email, private_key } = credentials;
 
     const jwtClient = new google.auth.JWT(client_email, null, private_key, SCOPES)

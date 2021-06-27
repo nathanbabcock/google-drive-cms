@@ -16,7 +16,7 @@
   </style>
 
   <script>
-    fetch('http://localhost:3000/api/v1/getSheet?id=1KILPC1y-2110Qurp_ItiVcsLp54cdTJ6rXxfhFjEUF4&range=Sheet1')
+    fetch('https://google-drive-cms.herokuapp.com/api/v1/getSheet?id=1KILPC1y-2110Qurp_ItiVcsLp54cdTJ6rXxfhFjEUF4&range=Sheet1')
       .then(response => response.json())
       .then((rows) => {
         rows.forEach(row => {

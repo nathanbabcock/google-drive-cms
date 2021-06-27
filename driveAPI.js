@@ -26,6 +26,9 @@ class DriveAPI {
     this.sheets = null;
     this.cache = {};
 
+    /** The base API url for this service, used for <img src=""> in cached images */
+    this.restEndpoint = 'http://localhost:3000/api/v1';
+
     // Load client secrets from a local file.
     fs.readFile(CREDENTIALS_PATH, (err, content) => {
       if (err) return this.missingCredentials()
@@ -142,7 +145,7 @@ class DriveAPI {
         fields: "data",
       }, (err, res) => {
         if (err) return reject('The API returned an error: ' + err);
-        resolve({html: res.data});
+        resolve({ html: this.rewriteToCachedImages(res.data) });
 
         // Cache images
         this.cacheImages(res.data);
@@ -154,10 +157,15 @@ class DriveAPI {
     const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,255}\.googleusercontent\.com\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
     const images = html.match(URL_REGEX);
-    if(!images || images.length <= 0) {
+    if (!images || images.length <= 0) {
       return;
     }
     images.forEach(image => this.downloadImage(image));
+  }
+
+  rewriteToCachedImages(html) {
+    const IMG_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,255}\.googleusercontent\.com\b\/([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return html.replace(IMG_REGEX, this.restEndpoint + '/getImage?id=$2');
   }
 
   downloadImage(url) {

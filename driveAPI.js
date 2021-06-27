@@ -4,6 +4,7 @@ const {google} = require('googleapis');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
+  'https://www.googleapis.com/auth/drive.file',
   'https://www.googleapis.com/auth/drive.readonly',
 ];
 
@@ -26,7 +27,10 @@ class DriveAPI {
     this.sheets = null;
     this.cache = {};
 
-    /** The base API url for this service, used for <img src=""> in cached images */
+    /**
+     * The base API url for this service, used for <img src=""> in cached images
+     * Can (and should) be modified by client application for production deployment URL
+     */
     this.restEndpoint = 'http://localhost:3000/api/v1';
 
     // Load client secrets from a local file.
@@ -41,6 +45,7 @@ class DriveAPI {
 
   missingCredentials() {
     console.error(`Could not load ${CREDENTIALS_PATH}`);
+    // TODO: Service account setup info
     console.log('- Start from the the Google Drive API node.js quickstart sample: https://developers.google.com/drive/api/v3/quickstart/nodejs#prerequisites');
     console.log(`- Follow the steps there in order to 1) create a project, 2) enable the GDrive API, and 3) authorize credentials for a service account`);
     console.log('- After you download the credentials JSON file from your Cloud Platform dashboard, place it in secret/credentials.json and run this script again');

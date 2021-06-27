@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 
 const router = express.Router();
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
   res.sendStatus(200);
 });
 
@@ -24,6 +24,10 @@ router.route('/getSheet')
     driveAPI.getSheet(req.query.id, req.query.range)
       .then((data)=>{
         res.json(data);
+      })
+      .catch(error => {
+        console.error(error);
+        res.sendStatus(500);
       });
   });
 
@@ -31,21 +35,33 @@ router.route('/getDoc')
   .get((req, res) => {
     console.log('GET /getDoc', req.query.id);
     driveAPI.getDoc(req.query.id)
-      .then(data => res.json(data));
+      .then(data => res.json(data))
+      .catch(error => {
+        console.error(error);
+        res.sendStatus(500);
+      });
   });
 
 router.route('/listFiles')
   .get((req, res) => {
     console.log('GET /listFiles', req.query.folder);
     driveAPI.listFiles(req.query.folder)
-      .then(data => res.json(data));
+      .then(data => res.json(data))
+      .catch(error => {
+        console.error(error);
+        res.sendStatus(500);
+      });
   });
 
 router.route('/getAll')
   .get((req, res) => {
     console.log('GET /getAll', req.query.driveId);
     driveAPI.getAll(req.query.driveId)
-      .then(data => res.json(data));
+      .then(data => res.json(data))
+      .catch(error => {
+        console.error(error);
+        res.sendStatus(500);
+      });
   });
 
 router.route('/getImage')

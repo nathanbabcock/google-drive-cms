@@ -5,10 +5,8 @@ const {google} = require('googleapis');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
-  'https://www.googleapis.com/auth/drive.metadata.readonly',
-  'https://www.googleapis.com/auth/drive',
   'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.readonly'
+  // 'https://www.googleapis.com/auth/drive.readonly',
 ];
 
 // The file token.json stores the user's access and refresh tokens, and is
@@ -43,7 +41,7 @@ class DriveAPI {
   missingCredentials() {
     console.error(`Could not load ${CREDENTIALS_PATH}`);
     console.log('- Start from the the Google Drive API node.js quickstart sample: https://developers.google.com/drive/api/v3/quickstart/nodejs#prerequisites');
-    console.log(`- Follow the steps there in order to 1) create a project, 2) enable the GDrive API, and 3) authorize credentials for a webserver app`);
+    console.log(`- Follow the steps there in order to 1) create a project, 2) enable the GDrive API, and 3) authorize credentials for a service account`);
     console.log('- After you download the credentials JSON file from your Cloud Platform dashboard, place it in secret/credentials.json and run this script again');
     console.log('- see ./credentials-sample.json for an example of the format of this file (but the credentials in that sample will not work!)');
     process.exit(1)
@@ -57,42 +55,34 @@ class DriveAPI {
   }
 
   authorize(credentials, callback) {
-    const {client_secret, client_id, redirect_uris} = credentials.installed;
-    const oAuth2Client = new google.auth.OAuth2(
-        client_id, client_secret, redirect_uris[0]);
+    console.log('authorize')
+    const {client_email, private_key } = credentials;
+    const jwtClient = new google.auth.JWT(
+      client_email,
+      null,
+      private_key,
+      SCOPES)
 
     // Check if we have previously stored a token.
     fs.readFile(TOKEN_PATH, (err, token) => {
-      if (err) return this.getAccessToken(oAuth2Client, callback);
-      oAuth2Client.setCredentials(JSON.parse(token));
+      if (err) return this.getAccessToken(jwtClient, callback);
+      jwtClient.setCredentials(JSON.parse(token.toString()));
       console.log('Token loaded from file');
-      callback(oAuth2Client);
+      callback(jwtClient);
     });
   }
 
-  getAccessToken(oAuth2Client, callback) {
-    const authUrl = oAuth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: SCOPES,
-    });
-    console.log('Authorize this app by visiting this url:', authUrl);
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    rl.question('Enter the code from that page here: ', (code) => {
-      rl.close();
-      oAuth2Client.getToken(code, (err, token) => {
-        if (err) return console.error('Error retrieving access token', err);
-        oAuth2Client.setCredentials(token);
-        // Store the token to disk for later program executions
-        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+  getAccessToken(jwtClient, callback) {
+    jwtClient.authorize((err, tokens) => {
+      if (err) return console.log(err)
+      else {
+        fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
           if (err) return console.error(err);
           console.log('Token stored to', TOKEN_PATH);
         });
-        callback(oAuth2Client);
-      });
-    });
+        callback(jwtClient);
+      }
+    })
   }
 
   readCache() {

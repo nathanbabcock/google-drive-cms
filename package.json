@@ -2,7 +2,7 @@
   "name": "google-drive-cms",
   "version": "1.0.0",
   "description": "Connect to Google Drive as a backend API for content & data",
-  "main": "express.js",
+  "main": "driveAPI.js",
   "scripts": {
     "start": "node express.js",
     "test": "echo \"Error: no test specified\" && exit 1"

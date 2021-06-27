@@ -5,8 +5,7 @@ const {google} = require('googleapis');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
-  'https://www.googleapis.com/auth/drive.file',
-  // 'https://www.googleapis.com/auth/drive.readonly',
+  'https://www.googleapis.com/auth/drive.readonly',
 ];
 
 // The file token.json stores the user's access and refresh tokens, and is
@@ -19,7 +18,7 @@ const CACHE_PATH = CACHE_ROOT + 'cache.json';
 
 const CREDENTIALS_PATH = 'secret/credentials.json';
 
-const TEAM_DRIVE_ID = '0AKS-uLyEVtEdUk9PVA';
+// const TEAM_DRIVE_ID = '0AKS-uLyEVtEdUk9PVA';
 
 class DriveAPI {
   constructor() {
@@ -32,7 +31,7 @@ class DriveAPI {
     fs.readFile(CREDENTIALS_PATH, (err, content) => {
       if (err) return this.missingCredentials()
       // Authorize a client with credentials, then call the Google Drive API.
-      this.authorize(JSON.parse(content), this.authCallback.bind(this));
+      this.authorize(JSON.parse(content.toString()), this.authCallback.bind(this));
     });
 
     this.readCache();
@@ -48,20 +47,18 @@ class DriveAPI {
   }
 
   authCallback(auth) {
-    console.log('Google authorization succeeded')
+    console.log('Google authorization succeeded');
     this.auth = auth;
     this.drive = google.drive({version: 'v3', auth});
     this.sheets = google.sheets({version: 'v4', auth});
+    // this.drive.files.list().then((res) => console.log('files: ', res.data));
   }
 
   authorize(credentials, callback) {
     console.log('authorize')
     const {client_email, private_key } = credentials;
-    const jwtClient = new google.auth.JWT(
-      client_email,
-      null,
-      private_key,
-      SCOPES)
+
+    const jwtClient = new google.auth.JWT(client_email, null, private_key, SCOPES)
 
     // Check if we have previously stored a token.
     fs.readFile(TOKEN_PATH, (err, token) => {
@@ -88,10 +85,10 @@ class DriveAPI {
   readCache() {
     fs.readFile(CACHE_PATH, (err, cache) => {
       if (err) {
-        fs.mkdirSync(CACHE_ROOT, (err) => console.error(err));
+        fs.mkdirSync(CACHE_ROOT);
         return console.log('No cache found');
       }
-      this.cache = JSON.parse(cache);
+      this.cache = JSON.parse(cache.toString());
       console.log('Cache loaded from file');
     });
   }
@@ -141,9 +138,9 @@ class DriveAPI {
   getDoc(id) {
     return new Promise((resolve, reject) => {
       this.drive.files.export({
-        "fileId": id,
-        "mimeType": "text/html",
-        "fields": "data"
+        fileId: id,
+        mimeType: "text/html",
+        fields: "data",
       }, (err, res) => {
         if (err) return reject('The API returned an error: ' + err);
         resolve({html: res.data});
@@ -189,8 +186,8 @@ class DriveAPI {
         orderBy: 'name',
         pageSize: 20,
         q: `'${folderId}' in parents and trashed != true`,
-        supportsTeamDrives: true,
-        teamDriveId: TEAM_DRIVE_ID,
+        // supportsTeamDrives: true,
+        // teamDriveId: TEAM_DRIVE_ID,
         fields: 'files(id, name, version)',
       }, (err, res) => {
         if (err) return reject('The API returned an error: ' + err);
@@ -269,7 +266,7 @@ class DriveAPI {
       case 'application/vnd.google-apps.folder':
         return Promise.resolve(files.filter(f => f.parents.includes(file.id)));
       default:
-        return Promise.reject('Unknown file mime type:', file.mimeType);
+        return Promise.reject(`Unknown file mime type: ${file.mimeType}`);
     }
   }
 
@@ -308,6 +305,7 @@ class DriveAPI {
 
   getAll(driveId) {
     return this.listAllFiles(driveId)
+      // @ts-ignore
       .then(files => {
         const too_old = files.filter(file => !this.cache[file.id] || this.cache[file.id].version < parseInt(file.version));
 

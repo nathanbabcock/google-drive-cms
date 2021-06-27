@@ -5,7 +5,6 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 80;
 const API_VERSION = 1;
 const driveAPI = new (require('./driveAPI'))();
 
-
 app.listen(port, () => console.log(`DriveConnector backend listening on port ${port}`));
 
 app.use((req, res, next) => {
@@ -78,6 +77,10 @@ router.route('/getImage')
   });
 
 app.use(`/api/v${API_VERSION}`, router);
+
+if (process.env.SERVE_SAMPLES) {
+  app.use('/samples', express.static('samples'));
+}
 
 // https://stackoverflow.com/a/21947851
 function onExit(callback) {

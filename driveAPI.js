@@ -1,6 +1,5 @@
 const fs = require('fs');
 const request = require('request');
-const readline = require('readline');
 const {google} = require('googleapis');
 
 // If modifying these scopes, delete token.json.
@@ -257,9 +256,8 @@ class DriveAPI {
   }
 
   getResource(file, files) {
-    switch(file.mimeType) {
+    switch (file.mimeType) {
       case 'application/vnd.google-apps.spreadsheet':
-        //return this.getSheet(file.id, "COMPONENTS"); // TODO batchGetSheet
         return this.batchGetSheet(file.id);
       case 'application/vnd.google-apps.document':
         return this.getDoc(file.id);
@@ -270,7 +268,7 @@ class DriveAPI {
     }
   }
 
-  listAllFiles(driveId) {
+  listAllFiles(teamDriveId = undefined) {
     return new Promise((resolve, reject) => {
       this.drive.files.list({
         corpora: 'teamDrive',
@@ -278,8 +276,8 @@ class DriveAPI {
         orderBy: 'name',
         pageSize: 100,
         q: `trashed != true`,
-        supportsTeamDrives: true,
-        teamDriveId: driveId,
+        supportsTeamDrives: teamDriveId ? true : false,
+        teamDriveId,
         fields: 'files(id, name, version, mimeType, parents)',
       }, (err, res) => {
         if (err) return reject('The API returned an error: ' + err);

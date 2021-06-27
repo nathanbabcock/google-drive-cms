@@ -190,16 +190,16 @@ class DriveAPI {
     });
   };
 
-  listFiles(folderId) {
+  listFiles(folderId, teamDriveId = undefined) {
     return new Promise((resolve, reject) => {
       this.drive.files.list({
-        corpora: 'teamDrive',
-        includeTeamDriveItems: true,
         orderBy: 'name',
         pageSize: 20,
         q: `'${folderId}' in parents and trashed != true`,
-        // supportsTeamDrives: true,
-        // teamDriveId: TEAM_DRIVE_ID,
+        corpora: teamDriveId ? 'teamDrive' : undefined,
+        includeTeamDriveItems: !!teamDriveId,
+        supportsTeamDrives: !!teamDriveId,
+        teamDriveId,
         fields: 'files(id, name, version)',
       }, (err, res) => {
         if (err) return reject('The API returned an error: ' + err);

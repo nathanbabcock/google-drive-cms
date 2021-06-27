@@ -80,6 +80,7 @@ app.use(`/api/v${API_VERSION}`, router);
 
 if (process.env.SERVE_SAMPLES) {
   app.use('/samples', express.static('samples'));
+  app.use('/', (req, res, next) => res.redirect('/samples'));
 }
 
 // https://stackoverflow.com/a/21947851

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.DRIVE_CMS_PORT ? parseInt(process.env.DRIVE_CMS_PORT) : 80;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 80;
 const API_VERSION = 1;
 const driveAPI = new (require('./driveAPI'))();
 

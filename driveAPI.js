@@ -30,12 +30,20 @@ class DriveAPI {
      */
     this.restEndpoint = 'http://localhost:3000/api/v1';
 
-    // Load client secrets from a local file.
-    fs.readFile(CREDENTIALS_PATH, (err, content) => {
-      if (err) return this.missingCredentials()
-      // Authorize a client with credentials, then call the Google Drive API.
-      this.authorize(JSON.parse(content.toString()), this.authCallback.bind(this));
-    });
+    // Load client secrets from environment vars (e.g. Heroku deployment)
+    if (process.env.CLIENT_EMAIL && process.env.PRIVATE_KEY) {
+      this.authorize({
+        client_email: process.env.CLIENT_EMAIL,
+        private_key: process.env.PRIVATE_KEY,
+      }, this.authCallback.bind(this))
+    } else {
+      // Load client secrets from file (recommended default)
+      fs.readFile(CREDENTIALS_PATH, (err, content) => {
+        if (err) return this.missingCredentials()
+        // Authorize a client with credentials, then call the Google Drive API.
+        this.authorize(JSON.parse(content.toString()), this.authCallback.bind(this));
+      });
+    }
 
     this.readCache();
   }
@@ -60,7 +68,7 @@ class DriveAPI {
 
   authorize(credentials, callback) {
     console.log('authorize')
-    const {client_email, private_key } = credentials;
+    const { client_email, private_key } = credentials;
 
     const jwtClient = new google.auth.JWT(client_email, null, private_key, SCOPES)
 

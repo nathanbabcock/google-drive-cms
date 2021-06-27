@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 80;
 const API_VERSION = 1;
 const driveAPI = new (require('./driveAPI'))();
 

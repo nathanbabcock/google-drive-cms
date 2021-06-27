@@ -8,3 +8,9 @@ First create desktop app credentials by following the steps in the [Google API n
 npm install
 npm start
 ```
+
+## Running your own samples
+
+- "Make a copy" of each of the sample docs in this folder
+- Share those copied docs with the Google service account you created during "Getting Started" (e.g. `google-drive-cms@npm-drive-cms.iam.gserviceaccount.com`)
+- Modify the `?id=` parameter inside the samples to correspond to the correct id

@@ -12,12 +12,9 @@ const SCOPES = [
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'secret/token.json';
-
 const CACHE_ROOT = 'cache/';
 const CACHE_PATH = CACHE_ROOT + 'cache.json';
-
 const CREDENTIALS_PATH = 'secret/credentials.json';
-
 // const TEAM_DRIVE_ID = '0AKS-uLyEVtEdUk9PVA';
 
 class DriveAPI {
@@ -142,7 +139,7 @@ class DriveAPI {
     return this.cache[hash] = json;
   }
 
-  getDoc(id) {
+  getDoc(id, skipCache = false) {
     return new Promise((resolve, reject) => {
       this.drive.files.export({
         fileId: id,
@@ -275,7 +272,7 @@ class DriveAPI {
       case 'application/vnd.google-apps.document':
         return this.getDoc(file.id);
       case 'application/vnd.google-apps.folder':
-        return Promise.resolve(files.filter(f => f.parents.includes(file.id)));
+        return Promise.resolve(files.filter(f => f.parents && f.parents.includes(file.id)));
       default:
         return Promise.reject(`Unknown file mime type: ${file.mimeType}`);
     }
@@ -284,12 +281,12 @@ class DriveAPI {
   listAllFiles(teamDriveId = undefined) {
     return new Promise((resolve, reject) => {
       this.drive.files.list({
-        corpora: 'teamDrive',
-        includeTeamDriveItems: true,
         orderBy: 'name',
         pageSize: 100,
         q: `trashed != true`,
-        supportsTeamDrives: teamDriveId ? true : false,
+        corpora: teamDriveId ? 'teamDrive' : undefined,
+        includeTeamDriveItems: !!teamDriveId,
+        supportsTeamDrives: !!teamDriveId,
         teamDriveId,
         fields: 'files(id, name, version, mimeType, parents)',
       }, (err, res) => {
@@ -314,8 +311,8 @@ class DriveAPI {
       });
   }
 
-  getAll(driveId) {
-    return this.listAllFiles(driveId)
+  getAll(teamDriveId = undefined) {
+    return this.listAllFiles(teamDriveId)
       // @ts-ignore
       .then(files => {
         const too_old = files.filter(file => !this.cache[file.id] || this.cache[file.id].version < parseInt(file.version));

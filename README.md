@@ -2,14 +2,20 @@
 
 [This shared Google Drive folder](https://drive.google.com/drive/folders/1smalxMj6mvavnxE_w7IcATZc-GVPSUd1) serves as the backend for [this sample webpage](https://google-drive-cms.herokuapp.com/).
 
-## Run the demo app locally
+## NPM
 
 ```sh
-npm install
+npm i google-drive-cms
+```
+
+## Run local demo
+
+```sh
+npm i
 npm start
 ```
 
-The local demo app connected to a remote backend deployed on Heroku. To run your own backend and connect to your own Google Drive, you will need to create your own API credentials by following the steps in the next section.
+*Note:* The local demo app connects to a remote backend deployed on Heroku. To run your own backend and connect to your own Google Drive, you will need to create your own API credentials by following the steps in the next section.
 
 ## Connecting to Google APIs via Service account credentials
 

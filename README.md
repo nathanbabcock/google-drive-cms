@@ -2,7 +2,7 @@
 
 [This shared Google Drive folder](https://drive.google.com/drive/folders/1smalxMj6mvavnxE_w7IcATZc-GVPSUd1) serves as the backend for [this sample webpage](https://google-drive-cms.herokuapp.com/).
 
-Quick links: [Github](https://github.com/nathanbabcock/google-drive-cms) / [NPM](https://www.npmjs.com/package/google-drive-cms) / [Dockerhub](https://hub.docker.com/r/nathanbabcock/google-drive-cms)
+Quick links: [Github](https://github.com/nathanbabcock/google-drive-cms) / [NPM](https://www.npmjs.com/package/google-drive-cms) / [Dockerhub](https://hub.docker.com/r/nathanbabcock/google-drive-cms) / [Heroku](https://google-drive-cms.herokuapp.com/)
 
 ## NPM
 

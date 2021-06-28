@@ -2,6 +2,7 @@
   "name": "google-drive-cms",
   "version": "1.0.0",
   "description": "Connect to Google Drive as a backend API for content & data",
+  "repository": "github:nathanbabcock/google-drive-cms",
   "main": "driveAPI.js",
   "scripts": {
     "start": "node express.js",

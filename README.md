@@ -2,6 +2,8 @@
 
 [This shared Google Drive folder](https://drive.google.com/drive/folders/1smalxMj6mvavnxE_w7IcATZc-GVPSUd1) serves as the backend for [this sample webpage](https://google-drive-cms.herokuapp.com/).
 
+Quick links: [Github](https://github.com/nathanbabcock/google-drive-cms) / [NPM](https://www.npmjs.com/package/google-drive-cms) / [Dockerhub](https://hub.docker.com/r/nathanbabcock/google-drive-cms)
+
 ## NPM
 
 ```sh
@@ -57,15 +59,25 @@ node node_modules/google-drive-cms/express.js
 
 ## Docker image
 
+Get the image on [Docker Hub](https://hub.docker.com/r/nathanbabcock/google-drive-cms).
+
 ```sh
-docker build . -t google-drive-cms
+# pull from docker hub
+docker pull nathanbabcock/google-drive-cms
+
+# or build locally:
+docker build . -t nathanbabcock/google-drive-cms
+
+# run container, passing in CLIENT_EMAIL and PRIVATE_KEY 
 docker run \
   --name google-drive-cms \
   --restart=always \
   --log-opt max-size=100m \
   --log-opt max-file=5 \
+  -e CLIENT_EMAIL=your-client-email-here@npm-drive-cms.iam.gserviceaccount.com \
+  -e PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n entire private keyfile here \n-----END PRIVATE KEY-----\n" \
   -v cache:/usr/src/app/cache \
   -p 80:80 \
   -d \
-  google-drive-cms
+  nathanbabcock/google-drive-cms
 ```

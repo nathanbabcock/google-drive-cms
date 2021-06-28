@@ -11,7 +11,8 @@ const SCOPES = [
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = 'secret/token.json';
+const TOKEN_ROOT = 'secret/'
+const TOKEN_PATH = TOKEN_ROOT + 'token.json';
 const CACHE_ROOT = 'cache/';
 const CACHE_PATH = CACHE_ROOT + 'cache.json';
 const CREDENTIALS_PATH = 'secret/credentials.json';
@@ -88,6 +89,7 @@ class DriveAPI {
     jwtClient.authorize((err, tokens) => {
       if (err) return console.log(err)
       else {
+        if (!fs.existsSync(TOKEN_ROOT)) fs.mkdirSync(TOKEN_ROOT);
         fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
           if (err) return console.error(err);
           console.log('Token stored to', TOKEN_PATH);

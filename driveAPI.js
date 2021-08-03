@@ -125,7 +125,7 @@ class DriveAPI {
         spreadsheetId: id,
         range: range,
       }, (err, res) => {
-        if (err) reject('The API returned an error: ' + err);
+        if (err) return reject('The API returned an error: ' + err);
         // console.log(res.data.values);
         const keys = res.data.values[0];
         const transformed = [];
